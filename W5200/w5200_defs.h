@@ -20,106 +20,106 @@
 #define W5200_DEFS_H
 
 //maximum number of sockets managed by the device
-#define MAX_SOCK_NUM 8
+const unsigned char MAX_SOCK_NUM = 8;
 
-#define COMMON_BASE 0x0000
+const unsigned int COMMON_BASE = 0x0000;
 
-#define TX_BUF_BASE (COMMON_BASE + 0x8000)  //TX buffer memory base address
+const unsigned int TX_BUF_BASE = COMMON_BASE + 0x8000;  //TX buffer memory base address
 
-#define RX_BUF_BASE (COMMON_BASE + 0xC000)  //RX buffer memory base address
+const unsigned int TX_BUF_BASE = COMMON_BASE + 0xC000;  //RX buffer memory base address
 
 /** common registers **/
 
-#define MR              (COMMON_BASE + 0x0000)  //mode register address
-#define GAR_BASE        (COMMON_BASE + 0x0001)  //Gateway IP Register base address
-#define SUBR_BASE       (COMMON_BASE + 0x0005)  //Subnet mask Register base address
-#define SHAR_BASE       (COMMON_BASE + 0x0009)  //Source MAC Register base address
-#define SIPR_BASE       (COMMON_BASE + 0x000F)  //Source IP Register base address
-#define IR              (COMMON_BASE + 0x0015)  //Interrupt Register address
-#define IR_MASK         (COMMON_BASE + 0x0016)  //Interrupt mask register
-#define RTR_BASE        (COMMON_BASE + 0x0017)  //retransmission Timeout register
-#define RCR             (COMMON_BASE + 0x0019)  //retransmission count register
-#define SOCK_IR         (COMMON_BASE + 0x0034)  //Socket Interrupt Register
-#define SOCK_IR_MASK    (COMMON_BASE + 0x0036)  //Socket Interrupt mask register
-#define PHY             (COMMON_BASE + 0x0035)  //PHY Status Register
+const unsigned int MR              = COMMON_BASE + 0x0000;  //mode register address
+const unsigned int GAR_BASE        = COMMON_BASE + 0x0001;  //Gateway IP Register base address
+const unsigned int SUBR_BASE       = COMMON_BASE + 0x0005;  //Subnet mask Register base address
+const unsigned int SHAR_BASE       = COMMON_BASE + 0x0009;  //Source MAC Register base address
+const unsigned int SIPR_BASE       = COMMON_BASE + 0x000F;  //Source IP Register base address
+const unsigned int IR              = COMMON_BASE + 0x0015;  //Interrupt Register address
+const unsigned int IR_MASK         = COMMON_BASE + 0x0016;  //Interrupt mask register
+const unsigned int RTR_BASE        = COMMON_BASE + 0x0017;  //retransmission Timeout register
+const unsigned int RCR             = COMMON_BASE + 0x0019;  //retransmission count register
+const unsigned int SOCK_IR         = COMMON_BASE + 0x0034;  //Socket Interrupt Register
+const unsigned int SOCK_IR_MASK    = COMMON_BASE + 0x0036;  //Socket Interrupt mask register
+const unsigned int PHY             = COMMON_BASE + 0x0035;  //PHY Status Register
 
-#define VERSION         (COMMON_BASE + 0x001F)  //chip version number register
+const unsigned int VERSION         = COMMON_BASE + 0x001F;  //chip version number register
 
-#define PPP_AUTH_REG    (COMMON_BASE + 0x001C)  //autentication type in PPPoE mode
-#define PPP_TIME_REG    (COMMON_BASE + 0x0028)  //LCP Request Timer register  in PPPoE mode
-#define PPP_MAGIC_REG   (COMMON_BASE + 0x0029)  //PPP LCP Magic number register  in PPPoE mode
+const unsigned int PPP_AUTH_REG    = COMMON_BASE + 0x001C;  //autentication type in PPPoE mode
+const unsigned int PPP_TIME_REG    = COMMON_BASE + 0x0028;  //LCP Request Timer register  in PPPoE mode
+const unsigned int PPP_MAGIC_REG   = COMMON_BASE + 0x0029;  //PPP LCP Magic number register  in PPPoE mode
 
-#define INTLEVEL0       (COMMON_BASE + 0x0030)  //set Interrupt low level timer register
-#define INTLEVEL1       (COMMON_BASE + 0x0031)
+const unsigned int INTLEVEL0       = COMMON_BASE + 0x0030;  //set Interrupt low level timer register
+const unsigned int INTLEVEL1       = COMMON_BASE + 0x0031;
 
 
 /* MODE register values */
-#define MR_RST          0x80 //reset
-#define MR_PB           0x10 //ping block enable
-#define MR_PPPOE        0x08 //PPPoE enable
+const unsigned char MR_RST          = 0x80; //reset
+const unsigned char MR_PB           = 0x10; //ping block enable
+const unsigned char MR_PPPOE        = 0x08; //PPPoE enable
 
 /* IR register values */
-#define IR_CONFLICT     0x80 //IP conflict
-#define IR_PPPoE        0x20 //PPPoE connection close
-#define IR_SOCK(ch)     (0x01 << ch) //check socket interrupt
+const unsigned char IR_CONFLICT     = 0x80; //IP conflict
+const unsigned char IR_PPPoE        = 0x20; //PPPoE connection close
+//#define IR_SOCK(ch)     (0x01 << ch) //check socket interrupt
 
 
 /** socket registers **/
 
-#define SR_BASE         (COMMON_BASE + 0x4000)  //socket registers base address
-#define SR_SIZE         0x100                   //size of each channel register map
+const unsigned int SR_BASE         = COMMON_BASE + 0x4000;  //socket registers base address
+const unsigned int SR_SIZE         = 0x100;                 //size of each channel register map
 
-#define SOCKn_MR            (SR_BASE + 0x0000) //socket Mode register
-#define SOCKn_CR            (SR_BASE + 0x0001) //socket command register
-#define SOCKn_IR            (SR_BASE + 0x0002) //socket interrupt register
-#define SOCKn_SR            (SR_BASE + 0x0003) //socket status register
-#define SOCKn_SPORT0        (SR_BASE + 0x0004) //socket source port register
-#define SOCKn_DHAR0         (SR_BASE + 0x0006) //socket destination MAC address register
-#define SOCKn_DIPR0         (SR_BASE + 0x000C) //socket destination IP address register
-#define SOCKn_DPORT0        (SR_BASE + 0x0010) //socket destination port register
-#define SOCKn_IMR           (SR_BASE + 0x002C) //socket's interrupt mask register
+const unsigned int SOCKn_MR            = SR_BASE + 0x0000; //socket Mode register
+const unsigned int SOCKn_CR            = SR_BASE + 0x0001; //socket command register
+const unsigned int SOCKn_IR            = SR_BASE + 0x0002; //socket interrupt register
+const unsigned int SOCKn_SR            = SR_BASE + 0x0003; //socket status register
+const unsigned int SOCKn_SPORT0        = SR_BASE + 0x0004; //socket source port register
+const unsigned int SOCKn_DHAR0         = SR_BASE + 0x0006; //socket destination MAC address register
+const unsigned int SOCKn_DIPR0         = SR_BASE + 0x000C; //socket destination IP address register
+const unsigned int SOCKn_DPORT0        = SR_BASE + 0x0010; //socket destination port register
+const unsigned int SOCKn_IMR           = SR_BASE + 0x002C; //socket's interrupt mask register
 
-#define SOCKn_MSSR0         (SR_BASE + 0x0012) //socket MSS in TCP mode
+const unsigned int SOCKn_MSSR0         = SR_BASE + 0x0012; //socket MSS in TCP mode
 
-#define SOCKn_PROTO         (SR_BASE + 0x0014) //socket protocol number in IPRAW mode
+const unsigned int SOCKn_PROTO         = SR_BASE + 0x0014; //socket protocol number in IPRAW mode
 
-#define SOCKn_TOS           (SR_BASE + 0x0015) //socket's IP header's Type of Service field value
-#define SOCKn_TTL           (SR_BASE + 0x0016) //socket's IP header's TTL field value
-#define SOCKn_FRAG0         (SR_BASE + 0x002D) //socket's IP header's Fragment field value 
+const unsigned int SOCKn_TOS           = SR_BASE + 0x0015; //socket's IP header's Type of Service field value
+const unsigned int SOCKn_TTL           = SR_BASE + 0x0016; //socket's IP header's TTL field value
+const unsigned int SOCKn_FRAG0         = SR_BASE + 0x002D; //socket's IP header's Fragment field value 
 
-#define SOCKn_RXMEM_SIZE    (SR_BASE + 0x001E) //socket's RX buffer size register
-#define SOCKn_TXMEM_SIZE    (SR_BASE + 0x001F) //socket's TX buffer size register
+const unsigned int SOCKn_RXMEM_SIZE    = SR_BASE + 0x001E; //socket's RX buffer size register
+const unsigned int SOCKn_TXMEM_SIZE    = SR_BASE + 0x001F; //socket's TX buffer size register
 
-#define SOCKn_TX_FSR0       (SR_BASE + 0x0020) //socket's TX buffer free size register
-#define SOCKn_TX_RD0        (SR_BASE + 0x0022) //socket's TX buffer read pointer address
-#define SOCKn_TX_WR0        (SR_BASE + 0x0024) //socket's TX buffer write pointer address
+const unsigned int SOCKn_TX_FSR0       = SR_BASE + 0x0020; //socket's TX buffer free size register
+const unsigned int SOCKn_TX_RD0        = SR_BASE + 0x0022; //socket's TX buffer read pointer address
+const unsigned int SOCKn_TX_WR0        = SR_BASE + 0x0024; //socket's TX buffer write pointer address
 
-#define SOCKn_RX_RSR0       (SR_BASE + 0x0026) //socket's received data size register
-#define SOCKn_RX_RD0        (SR_BASE + 0x0028) //socket's RX buffer read pointer address
-#define SOCKn_RX_WR0        (SR_BASE + 0x002A) //socket's RX buffer write pointer address
+const unsigned int SOCKn_RX_RSR0       = SR_BASE + 0x0026; //socket's received data size register
+const unsigned int SOCKn_RX_RD0        = SR_BASE + 0x0028; //socket's RX buffer read pointer address
+const unsigned int SOCKn_RX_WR0        = SR_BASE + 0x002A; //socket's RX buffer write pointer address
 
 
 
 /* SOCKn_MR values */
-#define SOCKn_MR_CLOSE     0x00        //socket closed
-#define SOCKn_MR_TCP       0x01        //TCP mode
-#define SOCKn_MR_UDP       0x02        //UDP mode
-#define SOCKn_MR_IPRAW     0x03        //IP layer raw socket
-#define SOCKn_MR_MACRAW    0x04        //MAC layer raw socket
-#define SOCKn_MR_PPPOE     0x05        //PPPoE mode
-#define SOCKn_MR_ND        0x20        //No delayed ACK enable
-#define SOCKn_MR_MULTI     0x80        //enable multicasting (only in UDP mode)
+const unsigned char SOCKn_MR_CLOSE     = 0x00;        //socket closed
+const unsigned char SOCKn_MR_TCP       = 0x01;        //TCP mode
+const unsigned char SOCKn_MR_UDP       = 0x02;        //UDP mode
+const unsigned char SOCKn_MR_IPRAW     = 0x03;        //IP layer raw socket
+const unsigned char SOCKn_MR_MACRAW    = 0x04;        //MAC layer raw socket
+const unsigned char SOCKn_MR_PPPOE     = 0x05;        //PPPoE mode
+const unsigned char SOCKn_MR_ND        = 0x20;        //No delayed ACK enable
+const unsigned char SOCKn_MR_MULTI     = 0x80;        //enable multicasting (only in UDP mode)
 
 /* SOCKn_CR values */
-#define SOCKn_CR_OPEN      0x01        //initialize and open socket
-#define SOCKn_CR_LISTEN    0x02        //wait connection request in TCP mode (Server mode)
-#define SOCKn_CR_CONNECT   0x04        //send connection request in TCP mode (Client mode)
-#define SOCKn_CR_DISCON    0x08        //disconnect request in TCP mode
-#define SOCKn_CR_CLOSE     0x10        //close socket
-#define SOCKn_CR_SEND      0x20        //send all data stored in TX buffer
-#define SOCKn_CR_SEND_MAC  0x21        //send data with MAC address without ARP process (only in UDP mode)
-#define SOCKn_CR_SEND_KEEP 0x22        //check if TCP connection is still alive
-#define SOCKn_CR_RECV      0x40        //receive data
+const unsigned char SOCKn_CR_OPEN      = 0x01;        //initialize and open socket
+const unsigned char SOCKn_CR_LISTEN    = 0x02;        //wait connection request in TCP mode (Server mode)
+const unsigned char SOCKn_CR_CONNECT   = 0x04;        //send connection request in TCP mode (Client mode)
+const unsigned char SOCKn_CR_DISCON    = 0x08;        //disconnect request in TCP mode
+const unsigned char SOCKn_CR_CLOSE     = 0x10;        //close socket
+const unsigned char SOCKn_CR_SEND      = 0x20;        //send all data stored in TX buffer
+const unsigned char SOCKn_CR_SEND_MAC  = 0x21;        //send data with MAC address without ARP process (only in UDP mode)
+const unsigned char SOCKn_CR_SEND_KEEP = 0x22;        //check if TCP connection is still alive
+const unsigned char SOCKn_CR_RECV      = 0x40;        //receive data
 
 // #ifdef __DEF_IINCHIP_PPP__
 //     #define SOCKn_CR_PCON      0x23         
@@ -135,39 +135,39 @@
 //     #define SOCKn_IR_PFAIL     0x40        
 //     #define SOCKn_IR_PNEXT     0x20        
 // #endif
-#define SOCKn_IR_CON       0x01        //connection established
-#define SOCKn_IR_DISCON    0x02        //disconnected (TCP mode)
-#define SOCKn_IR_RECV      0x04        //some data received
-#define SOCKn_IR_TIMEOUT   0x08        //Timeout occurred in ARP or TCP
-#define SOCKn_IR_SEND_OK   0x10        //SEND command completed
+const unsigned char SOCKn_IR_CON       = 0x01;        //connection established
+const unsigned char SOCKn_IR_DISCON    = 0x02;        //disconnected (TCP mode)
+const unsigned char SOCKn_IR_RECV      = 0x04;        //some data received
+const unsigned char SOCKn_IR_TIMEOUT   = 0x08;        //Timeout occurred in ARP or TCP
+const unsigned char SOCKn_IR_SEND_OK   = 0x10;        //SEND command completed
 
 /* SOCKn_SR values */
-#define SOCK_CLOSED        0x00        //socket closed
-#define SOCK_INIT          0x13        //TCP init state
-#define SOCK_LISTEN        0x14        //TCP server listen for connection state
-#define SOCK_SYNSENT       0x15        //TCP connection request sent to server
-#define SOCK_SYNRECV       0x16        //TCP connection request received from client
-#define SOCK_ESTABLISHED   0x17        //TCP connection established
-#define SOCK_FIN_WAIT      0x18        //TCP closing state
-#define SOCK_CLOSING       0x1A        //TCP closing state
-#define SOCK_TIME_WAIT     0x1B        //TCP closing state
-#define SOCK_CLOSE_WAIT    0x1C        //TCP closing state
-#define SOCK_LAST_ACK      0x1D        //TCP closing state
-#define SOCK_UDP           0x22        //socket opened in UDP mode
-#define SOCK_IPRAW         0x32        //socket opened in IP raw mode
-#define SOCK_MACRAW        0x42        //socket opened in MAC raw mode
-#define SOCK_PPPOE         0x5F        //socket opened in PPPoE mode
+const unsigned char SOCK_CLOSED        = 0x00;        //socket closed
+const unsigned char SOCK_INIT          = 0x13;        //TCP init state
+const unsigned char SOCK_LISTEN        = 0x14;        //TCP server listen for connection state
+const unsigned char SOCK_SYNSENT       = 0x15;        //TCP connection request sent to server
+const unsigned char SOCK_SYNRECV       = 0x16;        //TCP connection request received from client
+const unsigned char SOCK_ESTABLISHED   = 0x17;        //TCP connection established
+const unsigned char SOCK_FIN_WAIT      = 0x18;        //TCP closing state
+const unsigned char SOCK_CLOSING       = 0x1A;        //TCP closing state
+const unsigned char SOCK_TIME_WAIT     = 0x1B;        //TCP closing state
+const unsigned char SOCK_CLOSE_WAIT    = 0x1C;        //TCP closing state
+const unsigned char SOCK_LAST_ACK      = 0x1D;        //TCP closing state
+const unsigned char SOCK_UDP           = 0x22;        //socket opened in UDP mode
+const unsigned char SOCK_IPRAW         = 0x32;        //socket opened in IP raw mode
+const unsigned char SOCK_MACRAW        = 0x42;        //socket opened in MAC raw mode
+const unsigned char SOCK_PPPOE         = 0x5F;        //socket opened in PPPoE mode
 
 /* IP PROTOCOL */
-#define IPPROTO_IP         0           // Dummy for IP
-#define IPPROTO_ICMP       1           // ICMP protocol
-#define IPPROTO_IGMP       2           // IGMP protocol
-#define IPPROTO_GGP        3           // GGP protocol
-#define IPPROTO_TCP        6           // TCP
-#define IPPROTO_PUP        12          // PUP
-#define IPPROTO_UDP        17          // UDP
-#define IPPROTO_IDP        22          // XNS idp
-#define IPPROTO_RAW        255         // Raw IP packet */
+const unsigned char IPPROTO_IP         = 0;           // Dummy for IP
+const unsigned char IPPROTO_ICMP       = 1;           // ICMP protocol
+const unsigned char IPPROTO_IGMP       = 2;           // IGMP protocol
+const unsigned char IPPROTO_GGP        = 3;           // GGP protocol
+const unsigned char IPPROTO_TCP        = 6;           // TCP
+const unsigned char IPPROTO_PUP        = 12;          // PUP
+const unsigned char IPPROTO_UDP        = 17;          // UDP
+const unsigned char IPPROTO_IDP        = 22;          // XNS idp
+const unsigned char IPPROTO_RAW        = 255;         // Raw IP packet */
 
 
 /*** data types definition ***/
