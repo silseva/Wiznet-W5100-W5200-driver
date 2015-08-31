@@ -26,7 +26,7 @@
 
 typedef uint8 SOCKET;
 
-extern W5100& w5100; //a W5100 driver class instance
+// extern W5100& w5100; //a W5100 driver class instance
 
 class W5100
 {
@@ -118,7 +118,7 @@ public:
      * \param sockNum: socket number, between 0 and 3
      * \param port: socket's source port number
      */
-    uint8 setSocketSourcePort(SOCKET sockNum, uint16 port);
+    void setSocketSourcePort(SOCKET sockNum, uint16 port);
     
     /**
      * Sets socket's destination MAC address
@@ -146,7 +146,7 @@ public:
      * \param sockNum: socket number, between 0 and 3
      * \param value: MSS value
      */
-    void setSocketMSS(SOCKET sockNum, uint16 *value);
+    void setSocketMSS(SOCKET sockNum, uint16 value);
     
     /**
      * Set socket's protocol number when used in IPraw mode

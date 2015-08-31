@@ -24,7 +24,7 @@
 #include <algorithm>
 
 
-W5100& w5100 = W5100::instance();
+// W5100& w5100 = W5100::instance();
 
 W5100::W5100()
 {
@@ -97,7 +97,7 @@ uint8 W5100::readInterruptReg()
     return readRegister(IR);
 }
 
-void W5100::setSocketMSS(SOCKET sockNum, uint16* value)
+void W5100::setSocketMSS(SOCKET sockNum, uint16 value)
 {
     writeRegister(SOCKn_MSSR0 + sockNum * SR_SIZE, (uint8) ((value & 0xff00) >> 8));
     writeRegister(SOCKn_MSSR0 + sockNum * SR_SIZE + 1, (uint8) (value & 0x00ff));
@@ -131,7 +131,7 @@ uint8 W5100::getSocketInterruptReg(SOCKET sockNum)
 
 void W5100::setSocketProtocolValue(SOCKET sockNum, uint8 value)
 {
-    writeRegister(SOCKn_PROTO + sockNum * SR_SIZE);
+    writeRegister(SOCKn_PROTO + sockNum * SR_SIZE, value);
 }
 
 void W5100::setSocketCommandReg(SOCKET sockNum, uint8 value)
@@ -163,7 +163,7 @@ void W5100::setSocketDestPort(SOCKET sockNum, uint16 destPort)
     writeRegister(SOCKn_DPORT0 + sockNum * SR_SIZE + 1, (uint8) (destPort & 0x00ff));
 }
 
-uint8 W5100::setSocketSourcePort(SOCKET sockNum, uint16 port)
+void W5100::setSocketSourcePort(SOCKET sockNum, uint16 port)
 {
     writeRegister(SOCKn_SPORT0 + sockNum * SR_SIZE, (uint8) ((port & 0xff00) >> 8));
     writeRegister(SOCKn_SPORT0 + sockNum * SR_SIZE + 1, (uint8) (port & 0x00ff));
@@ -229,7 +229,7 @@ void W5100::readData(SOCKET sockNum, uint8* data, uint16 len)
     readPtr = readRegister(SOCKn_RX_RD0 + sockNum * SR_SIZE) << 8;  //read read pointer's upper byte
     readPtr += readRegister(SOCKn_RX_RD0 + sockNum * SR_SIZE + 1);  //read read pointer's lower byte
     
-    readRxBuf(sockNum, readPtr, data, len);
+    readRxBuf(sockNum, reinterpret_cast<uint8 *>(readPtr), data, len);
     
     readPtr += len;
     writeRegister(SOCKn_RX_RD0 + sockNum * SR_SIZE, (uint8)((readPtr & 0xFF00) >> 8)); //update read pointer value
@@ -242,7 +242,7 @@ void W5100::writeData(SOCKET sockNum, uint8* data, uint16 len)
     writePtr = readRegister(SOCKn_TX_WR0 + sockNum * SR_SIZE) << 8;  //read write pointer's upper byte
     writePtr += readRegister(SOCKn_TX_WR0 + sockNum * SR_SIZE + 1);  //read write pointer's lower byte
     
-    readRxBuf(sockNum, data, writePtr, len);
+    readRxBuf(sockNum, data, reinterpret_cast<uint8 *>(writePtr), len);
     
     writePtr += len;
     writeRegister(SOCKn_TX_WR0 + sockNum * SR_SIZE, (uint8)((writePtr & 0xFF00) >> 8)); //update write pointer value
@@ -268,19 +268,19 @@ void W5100::readRxBuf(SOCKET socket, volatile uint8* src, volatile uint8* dst, u
     /* the physical address at which reading process begins is base address plus
        the logical and between src pointer and address mask */
     
-    uint16 startAddress = (src & mask) + sockBufBase;
+    uint16 startAddress = (reinterpret_cast<unsigned int>(src) & mask) + sockBufBase;
     
     if(startAddress + len > rxBufSize[socket])
     {
         uint16 size = rxBufSize[socket] - startAddress;
-        readBuffer(startAddress, dst, size);
+        readBuffer(startAddress,const_cast<uint8 *>(dst), size);
         dst += size;
         size = len - size;
-        readBuffer(sockBufBase, dst, size);
+        readBuffer(sockBufBase, const_cast<uint8 *>(dst), size);
     
     }else{
         
-        readBuffer(startAddress, dst, len);
+        readBuffer(startAddress, const_cast<uint8 *>(dst), len);
     }
 }
 
@@ -302,19 +302,19 @@ void W5100::writeTxBuf(SOCKET socket, volatile uint8* src, volatile uint8* dst, 
     /* the physical address at which reading process begins is base address plus
        the logical and between src pointer and address mask */
     
-    uint16 startAddress = (dst & mask) + sockBufBase;
+    uint16 startAddress = (reinterpret_cast<unsigned int>(dst) & mask) + sockBufBase;
     
     if(startAddress + len > txBufSize[socket])
     {
         uint16 size = txBufSize[socket] - startAddress;
-        writeBuffer(startAddress, src, size);
+        writeBuffer(startAddress, const_cast<uint8 *>(src), size);
         dst += size;
         size = len - size;
-        writeBuffer(sockBufBase, src, size);
+        writeBuffer(sockBufBase, const_cast<uint8 *>(src), size);
     
     }else{
         
-        writeBuffer(startAddress, src, len);
+        writeBuffer(startAddress, const_cast<uint8 *>(src), len);
     }
 }
 
