@@ -23,6 +23,7 @@
 
 #include "w5100_defs.h"
 #include "spi_impl.h"
+#include <cstdio>
 
 typedef uint8 SOCKET;
 
@@ -98,6 +99,12 @@ public:
      */
     void setSocketCommandReg(SOCKET sockNum, uint8 value);
     
+    /**
+     * Used to get register's value, as a way to check if a given command is completed
+     * \param sockNum: socket number, between 0 and 3
+     * \return register's value
+     */
+    uint8 getSocketCommandReg(SOCKET sockNum);
     
     /**
      * Reads socket's interrupt register
@@ -224,7 +231,7 @@ private:
      * \param data: pointer to the data to be written
      * \param len: number of bytes to be written
      */
-    void writeBuffer(uint16 address, uint8 *data, uint16 len);
+    void writeBuffer(uint16 address, volatile uint8 *data, uint16 len);
     
     /**
      * Read one byte from chip's register
@@ -239,7 +246,7 @@ private:
      * \param data: pointer to the data to be read
      * \param len: number of bytes to be read
      */
-    void readBuffer(uint16 address, uint8 *data, uint16 len);
+    void readBuffer(uint16 address, volatile uint8 *data, uint16 len);
     
     /**
      * This function is used to copy data from application buffer to socket's 
@@ -249,10 +256,10 @@ private:
      *     
      * \param socket: socket number, between 0 and 3
      * \param src: pointer to source buffer
-     * \param dst: pointer to destination buffer
+     * \param dst: destination buffer start address. This start address is referred to chip's buffer!!
      * \param len: number of bytes to be copied
      */
-    void writeTxBuf(SOCKET socket, volatile uint8 *src, volatile uint8 *dst, uint16 len);
+    void writeTxBuf(SOCKET socket, volatile uint8 *src, uint16 dst, uint16 len);
     
     /**
      * This function is used to copy data from socket's in-chip TX buffer
@@ -261,11 +268,11 @@ private:
      * TODO: better description
      * 
      * \param socket: socket number, between 0 and 3
-     * \param src: pointer to source buffer
+     * \param src: source buffer start address. This start address is referred to chip's buffer!!
      * \param dst: pointer to destination buffer
      * \param len: number of bytes to be copied
      */
-    void readRxBuf(SOCKET socket, volatile uint8 *src, volatile uint8 *dst, uint16 len);
+    void readRxBuf(SOCKET socket, uint16 src, volatile uint8 *dst, uint16 len);
     
     uint16 txBufSize[MAX_SOCK_NUM];   //sockets TX buffer size in byte
     uint16 rxBufSize[MAX_SOCK_NUM];   //sockets RX buffer size in byte

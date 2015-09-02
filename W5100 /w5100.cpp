@@ -99,8 +99,8 @@ uint8 W5100::readInterruptReg()
 
 void W5100::setSocketMSS(SOCKET sockNum, uint16 value)
 {
-    writeRegister(SOCKn_MSSR0 + sockNum * SR_SIZE, (uint8) ((value & 0xff00) >> 8));
-    writeRegister(SOCKn_MSSR0 + sockNum * SR_SIZE + 1, (uint8) (value & 0x00ff));
+    writeRegister(SOCKn_MSSR0 + sockNum * SR_SIZE, static_cast<uint8>((value & 0xff00) >> 8));
+    writeRegister(SOCKn_MSSR0 + sockNum * SR_SIZE + 1, static_cast<uint8>(value & 0x00ff));
 }
 
 void W5100::setRetryCount(uint16 value)
@@ -110,8 +110,8 @@ void W5100::setRetryCount(uint16 value)
 
 void W5100::setRetryTime(uint16 value)
 {
-    writeRegister(RTR_BASE, (uint8) ((value & 0xff00) >> 8));
-    writeRegister(RTR_BASE + 1, (uint8) (value & 0x00ff));
+    writeRegister(RTR_BASE, static_cast<uint8>((value & 0xff00) >> 8));
+    writeRegister(RTR_BASE + 1, static_cast<uint8>(value & 0x00ff));
 }
 
 void W5100::setSocketModeReg(SOCKET sockNum, uint8 value)
@@ -139,6 +139,12 @@ void W5100::setSocketCommandReg(SOCKET sockNum, uint8 value)
     writeRegister(SOCKn_CR + sockNum * SR_SIZE, value);
 }
 
+uint8 W5100::getSocketCommandReg(SOCKET sockNum)
+{
+    return readRegister(SOCKn_CR + sockNum * SR_SIZE);
+}
+
+
 void W5100::setSocketDestIp(SOCKET sockNum, uint8* destIP)
 {
     writeRegister(SOCKn_DIPR0 + sockNum * SR_SIZE, destIP[0]);
@@ -159,14 +165,14 @@ void W5100::setSocketDestMac(SOCKET sockNum, uint8* destMAC)
 
 void W5100::setSocketDestPort(SOCKET sockNum, uint16 destPort)
 {
-    writeRegister(SOCKn_DPORT0 + sockNum * SR_SIZE, (uint8) ((destPort & 0xff00) >> 8));
-    writeRegister(SOCKn_DPORT0 + sockNum * SR_SIZE + 1, (uint8) (destPort & 0x00ff));
+    writeRegister(SOCKn_DPORT0 + sockNum * SR_SIZE, static_cast<uint8>((destPort & 0xff00) >> 8));
+    writeRegister(SOCKn_DPORT0 + sockNum * SR_SIZE + 1, static_cast<uint8>(destPort & 0x00ff));
 }
 
 void W5100::setSocketSourcePort(SOCKET sockNum, uint16 port)
 {
-    writeRegister(SOCKn_SPORT0 + sockNum * SR_SIZE, (uint8) ((port & 0xff00) >> 8));
-    writeRegister(SOCKn_SPORT0 + sockNum * SR_SIZE + 1, (uint8) (port & 0x00ff));
+    writeRegister(SOCKn_SPORT0 + sockNum * SR_SIZE, static_cast<uint8>((port & 0xff00) >> 8));
+    writeRegister(SOCKn_SPORT0 + sockNum * SR_SIZE + 1, static_cast<uint8>(port & 0x00ff));
 }
 
 void W5100::setSocketTos(SOCKET sockNum, uint8 TOSvalue)
@@ -225,32 +231,32 @@ uint16 W5100::getReceivedSize(SOCKET sockNum)
 
 void W5100::readData(SOCKET sockNum, uint8* data, uint16 len)
 {
-    uint16 readPtr;
+    uint16 readPtr = 0;
     readPtr = readRegister(SOCKn_RX_RD0 + sockNum * SR_SIZE) << 8;  //read read pointer's upper byte
     readPtr += readRegister(SOCKn_RX_RD0 + sockNum * SR_SIZE + 1);  //read read pointer's lower byte
     
-    readRxBuf(sockNum, reinterpret_cast<uint8 *>(readPtr), data, len);
+    readRxBuf(sockNum,readPtr, data, len);
     
     readPtr += len;
-    writeRegister(SOCKn_RX_RD0 + sockNum * SR_SIZE, (uint8)((readPtr & 0xFF00) >> 8)); //update read pointer value
-    writeRegister(SOCKn_RX_RD0 + sockNum * SR_SIZE + 1, (uint8)(readPtr & 0x00FF));
+    writeRegister(SOCKn_RX_RD0 + sockNum * SR_SIZE, static_cast<uint8>((readPtr & 0xFF00) >> 8)); //update read pointer value
+    writeRegister(SOCKn_RX_RD0 + sockNum * SR_SIZE + 1, static_cast<uint8>(readPtr & 0x00FF));
 }
 
 void W5100::writeData(SOCKET sockNum, uint8* data, uint16 len)
-{
-    uint16 writePtr;
+{    
+    uint16 writePtr = 0;
     writePtr = readRegister(SOCKn_TX_WR0 + sockNum * SR_SIZE) << 8;  //read write pointer's upper byte
     writePtr += readRegister(SOCKn_TX_WR0 + sockNum * SR_SIZE + 1);  //read write pointer's lower byte
     
-    readRxBuf(sockNum, data, reinterpret_cast<uint8 *>(writePtr), len);
+    writeTxBuf(sockNum, data, writePtr, len);
     
     writePtr += len;
-    writeRegister(SOCKn_TX_WR0 + sockNum * SR_SIZE, (uint8)((writePtr & 0xFF00) >> 8)); //update write pointer value
-    writeRegister(SOCKn_TX_WR0 + sockNum * SR_SIZE + 1, (uint8)(writePtr & 0x00FF));
+
+    writeRegister(SOCKn_TX_WR0 + sockNum * SR_SIZE, static_cast<uint8>((writePtr & 0xFF00) >> 8)); //update write pointer value
+    writeRegister(SOCKn_TX_WR0 + sockNum * SR_SIZE + 1, static_cast<uint8>(writePtr & 0x00FF));
 }
 
-
-void W5100::readRxBuf(SOCKET socket, volatile uint8* src, volatile uint8* dst, uint16 len)
+void W5100::readRxBuf(SOCKET socket, uint16 src, volatile uint8* dst, uint16 len)
 {
     
     /* compute socket's buffer base address as a sum of RX_BUF_BASE and
@@ -268,9 +274,9 @@ void W5100::readRxBuf(SOCKET socket, volatile uint8* src, volatile uint8* dst, u
     /* the physical address at which reading process begins is base address plus
        the logical and between src pointer and address mask */
     
-    uint16 startAddress = (reinterpret_cast<unsigned int>(src) & mask) + sockBufBase;
+    uint16 startAddress = (src & mask) + sockBufBase;
     
-    if(startAddress + len > rxBufSize[socket])
+    if((src & mask) + len > rxBufSize[socket])
     {
         uint16 size = rxBufSize[socket] - startAddress;
         readBuffer(startAddress,const_cast<uint8 *>(dst), size);
@@ -282,14 +288,15 @@ void W5100::readRxBuf(SOCKET socket, volatile uint8* src, volatile uint8* dst, u
         
         readBuffer(startAddress, const_cast<uint8 *>(dst), len);
     }
+    
 }
 
-void W5100::writeTxBuf(SOCKET socket, volatile uint8* src, volatile uint8* dst, uint16 len)
+void W5100::writeTxBuf(SOCKET socket, volatile uint8* src, uint16 dst, uint16 len)
 {
     
     /* compute socket's buffer base address as a sum of RX_BUF_BASE and
        the sizes of buffers allotted for sockets before this */
-
+    
     uint16 sockBufBase = TX_BUF_BASE;
     
     for(int i = 0; i < socket-1; i++)
@@ -302,19 +309,19 @@ void W5100::writeTxBuf(SOCKET socket, volatile uint8* src, volatile uint8* dst, 
     /* the physical address at which reading process begins is base address plus
        the logical and between src pointer and address mask */
     
-    uint16 startAddress = (reinterpret_cast<unsigned int>(dst) & mask) + sockBufBase;
+    uint16 startAddress = (dst & mask) + sockBufBase;
     
-    if(startAddress + len > txBufSize[socket])
+    if((dst & mask) + len > txBufSize[socket])
     {
         uint16 size = txBufSize[socket] - startAddress;
-        writeBuffer(startAddress, const_cast<uint8 *>(src), size);
+        writeBuffer(startAddress,src, size);
         dst += size;
         size = len - size;
-        writeBuffer(sockBufBase, const_cast<uint8 *>(src), size);
+        writeBuffer(sockBufBase,src, size);
     
     }else{
         
-        writeBuffer(startAddress, const_cast<uint8 *>(src), len);
+        writeBuffer(startAddress,src, len);
     }
 }
 
@@ -334,7 +341,7 @@ uint8 W5100::readRegister(uint16 address)
     return data;
 }
 
-void W5100::readBuffer(uint16 address, uint8* data, uint16 len)
+void W5100::readBuffer(uint16 address, volatile uint8* data, uint16 len)
 {
     if(len == 0)
         return;
@@ -365,7 +372,7 @@ void W5100::writeRegister(uint16 address, uint8 data)
     Spi_CS_high(); 
 }
 
-void W5100::writeBuffer(uint16 address, uint8* data, uint16 len)
+void W5100::writeBuffer(uint16 address, volatile uint8* data, uint16 len)
 {
     if(len == 0)
         return;
@@ -377,9 +384,10 @@ void W5100::writeBuffer(uint16 address, uint8* data, uint16 len)
         Spi_sendRecv(0xF0);                     // write opcode
         Spi_sendRecv(address >> 8);             // Address byte 1
         Spi_sendRecv(address & 0x00FF);         // Address byte 2
+        
         address++;
         Spi_sendRecv(data[i]);                  // Data write
-
+        
         Spi_CS_high();
     }
 }

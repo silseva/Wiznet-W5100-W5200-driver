@@ -23,7 +23,7 @@ void Spi_init()
 
 }
 
-void Spi_sendRecv(unsigned char data)
+unsigned char Spi_sendRecv(unsigned char data)
 {
 
 }
