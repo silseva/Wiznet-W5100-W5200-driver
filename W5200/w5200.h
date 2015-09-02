@@ -115,6 +115,13 @@ public:
     void setSocketCommandReg(SOCKET sockNum, uint8 value);
     
     /**
+     * Used to get register's value, as a way to check if a given command is completed
+     * \param sockNum: socket number, between 0 and 7
+     * \return register's value
+     */
+    uint8 getSocketCommandReg(SOCKET sockNum);
+    
+    /**
      * Configures the socket interrupts that will be signalled
      * \param sockNum: socket number, between 0 and 7
      * \param value: mask value
@@ -278,10 +285,10 @@ private:
      *     
      * \param socket: socket number, between 0 and 7
      * \param src: pointer to source buffer
-     * \param dst: pointer to destination buffer
+     * \param dst: destination buffer start address. This start address is referred to chip's buffer!!
      * \param len: number of bytes to be copied
      */
-    void writeTxBuf(SOCKET socket, volatile uint8 *src, volatile uint8 *dst, uint16 len);
+    void writeTxBuf(SOCKET socket, volatile uint8 *src, uint16 dst, uint16 len);
     
     /**
      * This function is used to copy data from socket's in-chip TX buffer
@@ -290,11 +297,11 @@ private:
      * TODO: better description
      * 
      * \param socket: socket number, between 0 and 7
-     * \param src: pointer to source buffer
+     * \param src: source buffer start address. This start address is referred to chip's buffer!!
      * \param dst: pointer to destination buffer
      * \param len: number of bytes to be copied
      */
-    void readRxBuf(SOCKET socket, volatile uint8 *src, volatile uint8 *dst, uint16 len);
+    void readRxBuf(SOCKET socket, uint16 src, volatile uint8 *dst, uint16 len);
     
     uint16 txBufSize[MAX_SOCK_NUM];   //sockets TX buffer size in byte
     uint16 rxBufSize[MAX_SOCK_NUM];   //sockets RX buffer size in byte

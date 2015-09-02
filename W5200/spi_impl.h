@@ -23,12 +23,12 @@
 #ifndef SPI_IMPL_H
 #define SPI_IMPL_H
 
-extern void Spi_init();
+void Spi_init();
 
-extern void Spi_sendRecv(unsigned char data);
+unsigned char Spi_sendRecv(unsigned char data);
 
-extern void Spi_CS_high();
+void Spi_CS_high();
 
-extern void Spi_CS_low();
+void Spi_CS_low();
 
 #endif // SPI_IMPL_H

@@ -26,7 +26,7 @@ const unsigned int COMMON_BASE = 0x0000;
 
 const unsigned int TX_BUF_BASE = COMMON_BASE + 0x8000;  //TX buffer memory base address
 
-const unsigned int TX_BUF_BASE = COMMON_BASE + 0xC000;  //RX buffer memory base address
+const unsigned int RX_BUF_BASE = COMMON_BASE + 0xC000;  //RX buffer memory base address
 
 /** common registers **/
 
