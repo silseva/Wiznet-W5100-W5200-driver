@@ -95,7 +95,7 @@ uint8 W5200::readInterruptReg()
     return readRegister(IR);
 }
 
-void W5200::setSocketMSS(SOCKET sockNum, uint16* value)
+void W5200::setSocketMSS(SOCKET sockNum, uint16 value)
 {
     writeRegister(SOCKn_MSSR0 + sockNum * SR_SIZE, static_cast<uint8>((value & 0xff00) >> 8));
     writeRegister(SOCKn_MSSR0 + sockNum * SR_SIZE + 1, static_cast<uint8>(value & 0x00ff));
@@ -129,7 +129,7 @@ uint8 W5200::getSocketInterruptReg(SOCKET sockNum)
 
 void W5200::setSocketProtocolValue(SOCKET sockNum, uint8 value)
 {
-    writeRegister(SOCKn_PROTO + sockNum * SR_SIZE);
+    writeRegister(SOCKn_PROTO + sockNum * SR_SIZE, value);
 }
 
 uint8 W5200::getPhyStatus()
@@ -186,7 +186,7 @@ void W5200::setSocketDestPort(SOCKET sockNum, uint16 destPort)
     writeRegister(SOCKn_DPORT0 + sockNum * SR_SIZE + 1, static_cast<uint8>(destPort & 0x00ff));
 }
 
-uint8 W5200::setSocketSourcePort(SOCKET sockNum, uint16 port)
+void W5200::setSocketSourcePort(SOCKET sockNum, uint16 port)
 {
     writeRegister(SOCKn_SPORT0 + sockNum * SR_SIZE, static_cast<uint8>((port & 0xff00) >> 8));
     writeRegister(SOCKn_SPORT0 + sockNum * SR_SIZE + 1, static_cast<uint8>(port & 0x00ff));
@@ -257,7 +257,8 @@ void W5200::writeData(SOCKET sockNum, uint8* data, uint16 len)
 }
 
 
-void W5200::readRxBuf(SOCKET socket, volatile uint16 src, volatile uint8* dst, uint16 len)
+// void W5200::readRxBuf(SOCKET socket, volatile uint16 src, volatile uint8* dst, uint16 len)
+void W5200::readRxBuf(SOCKET socket, volatile uint16 src, uint8* dst, uint16 len)
 {
     
     /* compute socket's buffer base address as a sum of RX_BUF_BASE and
@@ -291,7 +292,8 @@ void W5200::readRxBuf(SOCKET socket, volatile uint16 src, volatile uint8* dst, u
     }
 }
 
-void W5200::writeTxBuf(SOCKET socket, volatile uint8* src, uint16 dst, uint16 len)
+// void W5200::writeTxBuf(SOCKET socket, volatile uint8* src, uint16 dst, uint16 len)
+void W5200::writeTxBuf(SOCKET socket, uint8* src, uint16 dst, uint16 len)
 {
     
     /* compute socket's buffer base address as a sum of RX_BUF_BASE and

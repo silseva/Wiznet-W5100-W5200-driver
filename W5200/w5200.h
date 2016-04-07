@@ -26,7 +26,7 @@
 
 typedef uint8 SOCKET;
 
-extern W5200& w5200; //a W5200 driver class instance
+// extern W5200& w5200; //a W5200 driver class instance
 
 class W5200
 {
@@ -147,7 +147,7 @@ public:
      * \param sockNum: socket number, between 0 and 7
      * \param port: socket's source port number
      */
-    uint8 setSocketSourcePort(SOCKET sockNum, uint16 port);
+    void setSocketSourcePort(SOCKET sockNum, uint16 port);
     
     /**
      * Sets socket's destination MAC address
@@ -175,7 +175,7 @@ public:
      * \param sockNum: socket number, between 0 and 7
      * \param value: MSS value
      */
-    void setSocketMSS(SOCKET sockNum, uint16 *value);
+    void setSocketMSS(SOCKET sockNum, uint16 value);
     
     /**
      * Set socket's protocol number when used in IPraw mode
@@ -288,7 +288,8 @@ private:
      * \param dst: destination buffer start address. This start address is referred to chip's buffer!!
      * \param len: number of bytes to be copied
      */
-    void writeTxBuf(SOCKET socket, volatile uint8 *src, uint16 dst, uint16 len);
+//     void writeTxBuf(SOCKET socket, volatile uint8 *src, uint16 dst, uint16 len);
+     void writeTxBuf(SOCKET socket, uint8 *src, uint16 dst, uint16 len);
     
     /**
      * This function is used to copy data from socket's in-chip TX buffer
@@ -301,7 +302,8 @@ private:
      * \param dst: pointer to destination buffer
      * \param len: number of bytes to be copied
      */
-    void readRxBuf(SOCKET socket, uint16 src, volatile uint8 *dst, uint16 len);
+//     void readRxBuf(SOCKET socket, uint16 src, volatile uint8 *dst, uint16 len);
+    void readRxBuf(SOCKET socket, uint16 src, uint8 *dst, uint16 len);
     
     uint16 txBufSize[MAX_SOCK_NUM];   //sockets TX buffer size in byte
     uint16 rxBufSize[MAX_SOCK_NUM];   //sockets RX buffer size in byte
