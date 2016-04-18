@@ -313,11 +313,11 @@ void W5100::writeTxBuf(SOCKET socket, volatile uint8* src, uint16 dst, uint16 le
     
     if((dst & mask) + len > txBufSize[socket])
     {
-        uint16 size = txBufSize[socket] - startAddress;
-        writeBuffer(startAddress,src, size);
-        dst += size;
+        uint16_t size = txBufSize[socket] - (dst & mask);
+        writeBuffer(startAddress, src, size);
+        src += size;
         size = len - size;
-        writeBuffer(sockBufBase,src, size);
+        writeBuffer(sockBufBase, src, size);
     
     }else{
         
