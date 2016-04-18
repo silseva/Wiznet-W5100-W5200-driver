@@ -278,7 +278,7 @@ void W5100::readRxBuf(SOCKET socket, uint16 src, volatile uint8* dst, uint16 len
     
     if((src & mask) + len > rxBufSize[socket])
     {
-        uint16 size = rxBufSize[socket] - startAddress;
+        uint16 size = rxBufSize[socket] - (src & mask);
         readBuffer(startAddress,const_cast<uint8 *>(dst), size);
         dst += size;
         size = len - size;
