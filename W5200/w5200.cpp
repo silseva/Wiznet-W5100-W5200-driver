@@ -131,8 +131,8 @@ uint8_t W5200::getSocketInterruptReg(SOCKET sockNum)
 
 void W5200::clearSocketInterruptReg(SOCKET sockNum)
 {
-    uint8_t flags = getSocketInterruptReg(sockNum);
-    writeRegister(SOCKn_IR + sockNum * SR_SIZE, flags);
+//     uint8_t flags = getSocketInterruptReg(sockNum);
+    writeRegister(SOCKn_IR + sockNum * SR_SIZE, 0xFF);
 }
 
 void W5200::setSocketProtocolValue(SOCKET sockNum, uint8_t value)
