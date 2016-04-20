@@ -36,11 +36,11 @@ const unsigned int SUBR_BASE       = COMMON_BASE + 0x0005;  //Subnet mask Regist
 const unsigned int SHAR_BASE       = COMMON_BASE + 0x0009;  //Source MAC Register base address
 const unsigned int SIPR_BASE       = COMMON_BASE + 0x000F;  //Source IP Register base address
 const unsigned int IR              = COMMON_BASE + 0x0015;  //Interrupt Register address
-const unsigned int IR_MASK         = COMMON_BASE + 0x0016;  //Interrupt mask register
+const unsigned int IR_MASK         = COMMON_BASE + 0x0036;  //Interrupt mask register
 const unsigned int RTR_BASE        = COMMON_BASE + 0x0017;  //retransmission Timeout register
 const unsigned int RCR             = COMMON_BASE + 0x0019;  //retransmission count register
 const unsigned int SOCK_IR         = COMMON_BASE + 0x0034;  //Socket Interrupt Register
-const unsigned int SOCK_IR_MASK    = COMMON_BASE + 0x0036;  //Socket Interrupt mask register
+const unsigned int SOCK_IR_MASK    = COMMON_BASE + 0x0016;  //Socket Interrupt mask register
 const unsigned int PHY             = COMMON_BASE + 0x0035;  //PHY Status Register
 
 const unsigned int VERSION         = COMMON_BASE + 0x001F;  //chip version number register
@@ -168,27 +168,5 @@ const unsigned char IPPROTO_PUP        = 12;          // PUP
 const unsigned char IPPROTO_UDP        = 17;          // UDP
 const unsigned char IPPROTO_IDP        = 22;          // XNS idp
 const unsigned char IPPROTO_RAW        = 255;         // Raw IP packet */
-
-
-/*** data types definition ***/
-
-#ifdef CPLUSPLUS
-extern "C" {
-#endif
-
-/**
- * 8-bit unsigned data type.
- */
-typedef unsigned char uint8;
-
-/**
- * 16-bit unsigned data type.
- */
-typedef unsigned short uint16;
-
-
-#ifdef CPLUSPLUS
-}
-#endif
 
 #endif
