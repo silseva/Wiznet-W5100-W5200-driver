@@ -243,9 +243,7 @@ void W5200::readData(SOCKET sockNum, uint8_t* data, uint16_t len)
     uint16_t readPtr;          
     readPtr = readRegister(SOCKn_RX_RD0 + sockNum * SR_SIZE) << 8;  //read read pointer's upper byte
     readPtr += readRegister(SOCKn_RX_RD0 + sockNum * SR_SIZE + 1);  //read read pointer's lower byte    
-    
-    iprintf("readptr %x\n",readPtr);
-    
+
     readRxBuf(sockNum, readPtr, data, len);
     
     readPtr += len;
@@ -287,9 +285,7 @@ void W5200::readRxBuf(SOCKET socket, volatile uint16_t src, uint8_t* dst, uint16
        the logical and between src pointer and address mask */
     
     uint16_t startAddress = (src & mask) + sockBufBase;
-    
-    iprintf("reading %d from %x\n",len,startAddress);
-    
+
     if((src & mask) + len > rxBufSize[socket])
     {
         uint16_t size = rxBufSize[socket] - (src & mask);
